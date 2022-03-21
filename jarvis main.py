@@ -1,4 +1,5 @@
 
+from json.tool import main
 import pyttsx3 #pip install pyttsx3
 import speech_recognition as sr #pip install speechRecognition
 import datetime
@@ -6,13 +7,18 @@ import wikipedia #pip install wikipedia
 import webbrowser
 import os
 import sys
-#import wolframalpha (upcoming feature)
+import wolframalpha
+import json
+import requests
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 # print(voices[1].id)
 engine.setProperty('voice', voices[0].id)
-#chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+# chrome_path = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
+# webbrowser.register()
+
+# chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 #url =  'https://www.youtube.com/channel/UC6OUOw2jBeP4GwSRm8gshVQ'
 
  
@@ -70,42 +76,130 @@ if __name__ == "__main__":
             speak("According to Wikipedia")
             print(results)
             speak (results)
-
+        
+        #this is for opening youtube
         elif 'open youtube' in query:
             webbrowser.open("chrome", "youtube.com")
 
+        #this is for opening the best youtube channel 
         elif 'open vibes nation' in query:
             speak(" Opening Vibes Nation ")
             webbrowser.open("https://www.youtube.com/channel/UC6OUOw2jBeP4GwSRm8gshVQ")
 
+        #this is for opening learn
         elif 'open learn' in query:
             webbrowser.open("https://learn.uwaterloo.ca/d2l/home")
 
+        #this is for waterloo works
         elif 'open waterlooworks' in query:
             webbrowser.open("https://waterlooworks.uwaterloo.ca/myAccount/dashboard.htm")
 
+        #this is for netflix
         elif 'chill time' in query:
             webbrowser.open("https://www.netflix.com/browse")
 
+        #this is for playing music
         elif 'play my music' in query:
             speak(" Playing your music on amazon music ")
             webbrowser.open("https://music.amazon.ca/my/playlists/804ce7ec-8858-406a-a497-f2782f166e94")
-
+        
+        #this is for the time 
         elif 'what is the time' in query:
             strTime = datetime.datetime.now().strftime("%H:%M:%S")
             speak(f" Sir, currently the time is {strTime}")
     
+        #his is for openeing clion
         elif 'open sea lion ' in query:
             codePath = "C:\\Program Files\\JetBrains\\CLion 2021.3.2\\bin\\clion64.exe"
             os.startfile(codePath)
         
+        #this is for opening word
         elif 'open word' in query:
             codePath = "C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE"
             os.startfile(codePath)
 
+        #this is for opening outlook
         elif 'open outlook' in query:
             webbrowser.open("https://outlook.office.com/mail/inbox/id/AAQkADY3YzYwZTI3LTFkNmItNDEyNy04ZjMzLWMxNGY3MDI5NDhkNgAQAFWzcKL5dWVFv6NOBJ8j0R4%3D")
 
-        elif 'that is all jarvis' in query:
-            sys.exit()
+        #this is for python coding practice
+        elif 'it is coding time jarvis' in query:
+            webbrowser.open("https://www.sololearn.com/learning/1172")
+        
  
+        #this is to watch anime
+        elif 'anime time' in query:
+            speak(" Understood sir, it's anime time ")
+            webbrowser.open("https://ww7.attacktitanepisodes.com/attack-on-titan-season-4-episode-15-english-dubbed-watch-online/")
+
+        # this is to search anything on google
+        elif 'search' in query:
+            query = query.replace("search", "")
+            webbrowser.open ("https://www.google.com/search?q="+query+"&rlz=1C1ONGR_enCA973CA973&oq="+query+"&aqs=chrome..69i57j46i67i433j0i131i433i512j0i131i433i457i512j0i67i433j0i3j0i433i512l2j0i512l2.4828j0j7&sourceid=chrome&ie=UTF-8")
+            speak("searching" + query+ "on google")
+            
+        elif 'what' in query:
+            query = query.replace("search", "")
+            webbrowser.open ("https://www.google.com/search?q="+query+"&rlz=1C1ONGR_enCA973CA973&oq="+query+"&aqs=chrome..69i57j46i67i433j0i131i433i512j0i131i433i457i512j0i67i433j0i3j0i433i512l2j0i512l2.4828j0j7&sourceid=chrome&ie=UTF-8")
+            speak("searching" + query+ "on google")
+
+        elif 'who' in query:
+            query = query.replace("search", "")
+            webbrowser.open ("https://www.google.com/search?q="+query+"&rlz=1C1ONGR_enCA973CA973&oq="+query+"&aqs=chrome..69i57j46i67i433j0i131i433i512j0i131i433i457i512j0i67i433j0i3j0i433i512l2j0i512l2.4828j0j7&sourceid=chrome&ie=UTF-8")
+            speak("searching" + query+ "on google")
+            
+
+        #This is for geographical and computationa questions
+        elif 'ask' in query:
+            speak(' What may I help you find?')
+            question = takeCommand()
+            app_id = "K88UKY-EPY4U9L98V"
+            client = wolframalpha.Client('K88UKY-EPY4U9L98V')
+            response = client.query(question)
+            answer = next(response.results).text
+            speak(answer)
+            print(answer)
+
+        #This is for the creator of the assistant
+
+        # elif ("who made you", "who created you","Did I create you", 'who discovered you', 'did you make yourself')in query:
+        #     speak('I was created by Nikunj Patel')
+        #     print('I was created by Nikunj Patel')
+        
+        #This is for weather 
+        elif "what is the weather" in query:
+            api_key = "d35aa773eeb843dbf143c422fcf1f634"
+            base_url = "https://api.openweathermap.org/data/2.5/weather?q="
+            speak("Sir, what is the name of the city?")
+            city_name = takeCommand() 
+            complete_url = base_url + city_name + "&units=metric&appid=" + api_key
+            response = requests.get(complete_url)
+            x = response.json()
+            if x["cod"] != "404":
+                y=x["main"]
+                now_temp = y["temp"]
+                now_humid = y["humidity"]
+                z = x["weather"]
+                weather_desc = z[0]["description"]
+                speak("The current temperature in celsius in " +city_name+ "is" + str(now_temp) + 
+                        "\n while the humidity in percentage is " + str(now_humid) +
+                        "\n and it looks like its" + str(weather_desc) + "in " + city_name)
+        
+          #exit status function
+        elif 'that is all jarvis' in query:
+            speak('Goodbye sir')
+            sys.exit()
+
+        elif 'thank you' in query:
+            speak("That's my duty. Please call me if you require my assistance. Goodbye sir")
+            sys.exit()
+
+# UPCOMING FEATURES/IN DEVELOPMENT
+#       add wake up word
+#       add a note taking FEATURE
+#       add a timer
+#       add a calender
+#       WATCH ANYTHING ON YOUTUBE WITH THE USE OF VOICE COMMMAND
+
+
+      
