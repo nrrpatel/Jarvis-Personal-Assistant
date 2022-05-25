@@ -1,4 +1,3 @@
-
 from json.tool import main
 import pyttsx3 #pip install pyttsx3
 import speech_recognition as sr #pip install speechRecognition
@@ -10,6 +9,10 @@ import sys
 import wolframalpha
 import json
 import requests
+import random
+import pywhatkit as pwk
+from lsHotword import ls
+
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -66,6 +69,7 @@ def takeCommand():
 if __name__ == "__main__":
     wishMe()
     while True:
+        ls.lsHotword_loop()
         query = takeCommand().lower()
     
     #Logic for executing tasks based on query
@@ -78,8 +82,10 @@ if __name__ == "__main__":
             speak (results)
         
         #this is for opening youtube
-        elif 'open youtube' in query:
-            webbrowser.open("chrome", "youtube.com")
+        # elif 'open youtube' in query:
+        #     speak("Opening youtube")
+        #     webbrowser.open("https://www.youtube.com/")
+
 
         #this is for opening the best youtube channel 
         elif 'open vibes nation' in query:
@@ -88,16 +94,33 @@ if __name__ == "__main__":
 
         #this is for opening learn
         elif 'open learn' in query:
+            speak("opening learn")
             webbrowser.open("https://learn.uwaterloo.ca/d2l/home")
+        
+        elif 'show me the news' in query:
+            speak("opening national post")
+            webbrowser.open("https://nationalpost.com/")
 
         #this is for waterloo works
         elif 'open waterlooworks' in query:
+            speak("opening waterlooworks")
             webbrowser.open("https://waterlooworks.uwaterloo.ca/myAccount/dashboard.htm")
+
+        elif 'help me find a job' in query:
+            speak("opening waterlooworks")
+            webbrowser.open("https://waterlooworks.uwaterloo.ca/myAccount/dashboard.htm")
+
 
         #this is for netflix
         elif 'chill time' in query:
             webbrowser.open("https://www.netflix.com/browse")
 
+        elif 'netflix' in query:
+            speak("opening netflix")
+            webbrowser.open("https://www.netflix.com/browse")
+
+
+        
         #this is for playing music
         elif 'play my music' in query:
             speak(" Playing your music on amazon music ")
@@ -122,44 +145,170 @@ if __name__ == "__main__":
         elif 'open outlook' in query:
             webbrowser.open("https://outlook.office.com/mail/inbox/id/AAQkADY3YzYwZTI3LTFkNmItNDEyNy04ZjMzLWMxNGY3MDI5NDhkNgAQAFWzcKL5dWVFv6NOBJ8j0R4%3D")
 
-        #this is for python coding practice
-        elif 'it is coding time jarvis' in query:
+        #this is for python coding practices
+        elif 'practice time' in query:
             webbrowser.open("https://www.sololearn.com/learning/1172")
         
  
         #this is to watch anime
         elif 'anime time' in query:
             speak(" Understood sir, it's anime time ")
-            webbrowser.open("https://ww7.attacktitanepisodes.com/attack-on-titan-season-4-episode-15-english-dubbed-watch-online/")
+            webbrowser.open("https://ww7.attacktitanepisode.com/attack-on-titan-season-4-episode-15-english-dubbed-watch-online/")
 
         # this is to search anything on google
         elif 'search' in query:
             query = query.replace("search", "")
             webbrowser.open ("https://www.google.com/search?q="+query+"&rlz=1C1ONGR_enCA973CA973&oq="+query+"&aqs=chrome..69i57j46i67i433j0i131i433i512j0i131i433i457i512j0i67i433j0i3j0i433i512l2j0i512l2.4828j0j7&sourceid=chrome&ie=UTF-8")
             speak("searching" + query+ "on google")
-            
-        elif 'what' in query:
-            query = query.replace("search", "")
-            webbrowser.open ("https://www.google.com/search?q="+query+"&rlz=1C1ONGR_enCA973CA973&oq="+query+"&aqs=chrome..69i57j46i67i433j0i131i433i512j0i131i433i457i512j0i67i433j0i3j0i433i512l2j0i512l2.4828j0j7&sourceid=chrome&ie=UTF-8")
-            speak("searching" + query+ "on google")
 
-        elif 'who' in query:
-            query = query.replace("search", "")
-            webbrowser.open ("https://www.google.com/search?q="+query+"&rlz=1C1ONGR_enCA973CA973&oq="+query+"&aqs=chrome..69i57j46i67i433j0i131i433i512j0i131i433i457i512j0i67i433j0i3j0i433i512l2j0i512l2.4828j0j7&sourceid=chrome&ie=UTF-8")
-            speak("searching" + query+ "on google")
+        elif 'youtube' in query:
+            video = query
+            speak(f"Okay sir, playing {video} on youtube")
+            pwk.playonyt(video)
+            # query = query.replace("youtube", "")
+            # webbrowser.open ("https://www.google.com/search?q="+query+"&rlz=1C1ONGR_enCA973CA973&oq="+query+"&aqs=chrome..69i57j46i67i433j0i131i433i512j0i131i433i457i512j0i67i433j0i3j0i433i512l2j0i512l2.4828j0j7&sourceid=chrome&ie=UTF-8")
+            # speak("searching" + query+ "on google")
             
 
         #This is for geographical and computationa questions
-        elif 'ask' in query:
-            speak(' What may I help you find?')
-            question = takeCommand()
+        elif 'capital' in query:
+            question = query
             app_id = "K88UKY-EPY4U9L98V"
             client = wolframalpha.Client('K88UKY-EPY4U9L98V')
             response = client.query(question)
             answer = next(response.results).text
             speak(answer)
             print(answer)
+        
+        elif 'current weather' in query:
+            question = query
+            app_id = "K88UKY-EPY4U9L98V"
+            client = wolframalpha.Client('K88UKY-EPY4U9L98V')
+            response = client.query(question)
+            answer = next(response.results).text
+            speak(answer)
+            print(answer)
+     
+        elif "flip" in query:
+            moves = ["heads", "tails"]
+            cmove=random.choice(moves)
+            speak("Sir I choose " + cmove)
+        
+        elif '1' in query:
+            question = query 
+            app_id = "K88UKY-EPY4U9L98V"
+            client = wolframalpha.Client('K88UKY-EPY4U9L98V')
+            response = client.query(question)
+            answer = next(response.results).text
+            speak(answer)
+            print(answer)
+        
+        elif '' in query:
+            question = query 
+            app_id = "K88UKY-EPY4U9L98V"
+            client = wolframalpha.Client('K88UKY-EPY4U9L98V')
+            response = client.query(question)
+            answer = next(response.results).text
+            speak(answer)
+            print(answer)
+       
+        elif '2' in query:
+            question = query 
+            app_id = "K88UKY-EPY4U9L98V"
+            client = wolframalpha.Client('K88UKY-EPY4U9L98V')
+            response = client.query(question)
+            answer = next(response.results).text
+            speak(answer)
+            print(answer)
+            # break use this for making it stop after a command
+        
+        elif '3' in query:
+            question = query 
+            app_id = "K88UKY-EPY4U9L98V"
+            client = wolframalpha.Client('K88UKY-EPY4U9L98V')
+            response = client.query(question)
+            answer = next(response.results).text
+            speak(answer)
+            print(answer)
+            # break use this for making it stop after a command
+        elif '4' in query:
+            question = query 
+            app_id = "K88UKY-EPY4U9L98V"
+            client = wolframalpha.Client('K88UKY-EPY4U9L98V')
+            response = client.query(question)
+            answer = next(response.results).text
+            speak(answer)
+            print(answer)
+            # break use this for making it stop after a command
+        elif '5' in query:
+            question = query 
+            app_id = "K88UKY-EPY4U9L98V"
+            client = wolframalpha.Client('K88UKY-EPY4U9L98V')
+            response = client.query(question)
+            answer = next(response.results).text
+            speak(answer)
+            print(answer)
+            # break use this for making it stop after a command
+        elif '6' in query:
+            question = query 
+            app_id = "K88UKY-EPY4U9L98V"
+            client = wolframalpha.Client('K88UKY-EPY4U9L98V')
+            response = client.query(question)
+            answer = next(response.results).text
+            speak(answer)
+            print(answer)
+            # break use this for making it stop after a command
+        elif '7' in query:
+            question = query 
+            app_id = "K88UKY-EPY4U9L98V"
+            client = wolframalpha.Client('K88UKY-EPY4U9L98V')
+            response = client.query(question)
+            answer = next(response.results).text
+            speak(answer)
+            print(answer)
+            # break use this for making it stop after a command
+        elif '8' in query:
+            question = query 
+            app_id = "K88UKY-EPY4U9L98V"
+            client = wolframalpha.Client('K88UKY-EPY4U9L98V')
+            response = client.query(question)
+            answer = next(response.results).text
+            speak(answer)
+            print(answer)
+            # break use this for making it stop after a command
+        elif '9' in query:
+            question = query 
+            app_id = "K88UKY-EPY4U9L98V"
+            client = wolframalpha.Client('K88UKY-EPY4U9L98V')
+            response = client.query(question)
+            answer = next(response.results).text
+            speak(answer)
+            print(answer)
+            # break use this for making it stop after a command
+        
+        elif '0' in query:
+            question = query 
+            app_id = "K88UKY-EPY4U9L98V"
+            client = wolframalpha.Client('K88UKY-EPY4U9L98V')
+            response = client.query(question)
+            answer = next(response.results).text
+            speak(answer)
+            print(answer)
+            # break use this for making it stop after a command
+        
+        elif 'integral' in query:
+            question = query 
+            app_id = "K88UKY-EPY4U9L98V"
+            client = wolframalpha.Client('K88UKY-EPY4U9L98V')
+            response = client.query(question)
+            answer = next(response.results).text
+            speak(answer)
+            print(answer)
+            # break use this for making it stop after a command
+        
+        
 
+        
         #This is for the creator of the assistant
 
         # elif ("who made you", "who created you","Did I create you", 'who discovered you', 'did you make yourself')in query:
@@ -167,7 +316,7 @@ if __name__ == "__main__":
         #     print('I was created by Nikunj Patel')
         
         #This is for weather 
-        elif "what is the weather" in query:
+        elif "weather" in query:
             api_key = "d35aa773eeb843dbf143c422fcf1f634"
             base_url = "https://api.openweathermap.org/data/2.5/weather?q="
             speak("Sir, what is the name of the city?")
@@ -186,14 +335,23 @@ if __name__ == "__main__":
                         "\n and it looks like its" + str(weather_desc) + "in " + city_name)
         
           #exit status function
-        elif 'that is all jarvis' in query:
+        elif 'thanks' in query:
             speak('Goodbye sir')
             sys.exit()
 
         elif 'thank you' in query:
             speak("That's my duty. Please call me if you require my assistance. Goodbye sir")
             sys.exit()
+        
+        elif 'goodbye jarvis' in query:
+            speak("Have a wonderful day sir. Please call me if you require my assistance. Goodbye")
+            sys.exit()
 
+        elif 'bye' in query:
+            speak("Have a wonderful day sir. Please call me if you require my assistance. Goodbye")
+            sys.exit()
+
+        ls.lsHotword_loop()
 # UPCOMING FEATURES/IN DEVELOPMENT
 #       add wake up word
 #       add a note taking FEATURE
